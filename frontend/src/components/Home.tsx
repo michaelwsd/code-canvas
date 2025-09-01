@@ -32,13 +32,20 @@ export const Home = ({socket}: HomeProps) => {
       socket.connect()
     }
 
-    auth.setAuthenticated(true);
-    socket.emit("userJoined", roomData);
-    setTimeout(() => {
-      navigate(`/code/${roomData.roomId}`);
-      setGenLoading(false);
-    }, 800);
+    // make sure server is running 
+    socket.emit("validateRoom", roomId);
+    socket.once("roomValidated", (data) => {
 
+      if (data == true || data == false) {
+        // create and join room 
+        socket.emit("userJoined", roomData);
+        auth.setAuthenticated(true);
+        setTimeout(() => {
+          navigate(`/code/${roomData.roomId}`);
+          setGenLoading(false);
+        }, 800);
+      }
+    })
   };
 
   const joinRoom = (e: React.FormEvent) => {
