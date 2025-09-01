@@ -45,7 +45,7 @@ export const Home = ({socket}: HomeProps) => {
         socket.emit("userJoined", roomData);
         auth.setAuthenticated(true);
         setTimeout(() => {
-          navigate(`/code/${roomData.roomId}`);
+          navigate(`/code/${roomData.roomId}`, {replace: true});
           setGenLoading(false);
           setJoinDisable(false);
         }, 800);
@@ -87,7 +87,7 @@ export const Home = ({socket}: HomeProps) => {
         auth.setAuthenticated(true);
         socket.emit("userJoined", roomData);
         setTimeout(() => {
-          navigate(`/code/${roomData.roomId}`);
+          navigate(`/code/${roomData.roomId}`, {replace: true});
           setJoinLoading(false);
           setGenDisable(false);
         }, 800);
