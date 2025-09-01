@@ -11,6 +11,8 @@ export const Home = ({socket}: HomeProps) => {
   const [username, setUsername] = useState("");
   const [genLoading, setGenLoading] = useState(false);
   const [joinLoading, setJoinLoading] = useState(false);
+  const [joinDisable, setJoinDisable] = useState(false);
+  const [genDisable, setGenDisable] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -21,6 +23,7 @@ export const Home = ({socket}: HomeProps) => {
   const generateRoom = (e: React.FormEvent) => {
     e.preventDefault();
     setGenLoading(true);
+    setJoinDisable(true);
 
     const roomData: userDataType = {
       username: username || "guest",
@@ -34,15 +37,17 @@ export const Home = ({socket}: HomeProps) => {
 
     // make sure server is running 
     socket.emit("validateRoom", roomId);
-    socket.once("roomValidated", (data) => {
-
-      if (data == true || data == false) {
+    socket.once("roomValidated", (exists) => {
+      
+      // room id has to be unique
+      if (!exists) {
         // create and join room 
         socket.emit("userJoined", roomData);
         auth.setAuthenticated(true);
         setTimeout(() => {
           navigate(`/code/${roomData.roomId}`);
           setGenLoading(false);
+          setJoinDisable(false);
         }, 800);
       }
     })
@@ -62,6 +67,7 @@ export const Home = ({socket}: HomeProps) => {
     }
 
     setJoinLoading(true);
+    setGenDisable(true);
     
     const roomData: userDataType = {
       username: username || "guest",
@@ -83,11 +89,13 @@ export const Home = ({socket}: HomeProps) => {
         setTimeout(() => {
           navigate(`/code/${roomData.roomId}`);
           setJoinLoading(false);
+          setGenDisable(false);
         }, 800);
 
       } else {
         setTimeout(() => {
           setJoinLoading(false);
+          setGenDisable(false);
           toaster.create({
             description: "Room does not exist",
             type: "error",
@@ -169,6 +177,7 @@ export const Home = ({socket}: HomeProps) => {
               loading={joinLoading}
               loadingText='Joining...'
               fontWeight={'bold'}
+              disabled={joinDisable}
             >
               Join Room
             </Button>
@@ -185,6 +194,7 @@ export const Home = ({socket}: HomeProps) => {
               loading={genLoading}
               loadingText='Generating...'
               fontWeight={'bold'}
+              disabled={genDisable}
             >
               Generate Room
             </Button>
