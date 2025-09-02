@@ -18,7 +18,7 @@ function App() {
 
     // create the socket once on mount
     // deployed backend server: https://code-canvas-backend-r1z9.onrender.com
-    const server = "http://localhost:5000";
+    const server = "https://localhost:5000";
     const connectionOptions = {
       "force new connection": true,
       reconnectionAttempts: Infinity,
@@ -84,6 +84,7 @@ function App() {
                 <CodeCanvas users={users} user={user!} socket={socket} />
               </AuthenticatedRoute>
             } />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
         <Toaster />
