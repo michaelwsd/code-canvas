@@ -68,3 +68,9 @@ export type AuthContextType = {
 export interface AuthProviderProps {
     children: ReactNode;
   }
+
+export interface AnimateRoutesType {
+    users: userDataType[]
+    user: userDataType
+    socket: Socket
+}

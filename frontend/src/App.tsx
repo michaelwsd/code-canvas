@@ -1,13 +1,12 @@
 import { Box } from '@chakra-ui/react'
-import { CodeCanvas } from './components/CodeCanvas'
-import { Home } from './components/Home'
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { BrowserRouter } from "react-router-dom"
 import io from "socket.io-client"
 import { useEffect, useState } from 'react'
 import { Toaster, toaster } from "@/components/ui/toaster"
 import type { userDataType } from './utils/types'
 import { Socket } from 'socket.io-client'
-import { AuthProvider, useAuth } from './components/AuthContext'
+import { AuthProvider } from './components/AuthContext'
+import { AnimateRoutes } from './components/AnimateRoutes'
 
 function App() {
   const [user, setUser] = useState<userDataType>();
@@ -18,7 +17,7 @@ function App() {
 
     // create the socket once on mount
     // deployed backend server: https://code-canvas-backend-r1z9.onrender.com
-    const server = "https://localhost:5000";
+    const server = "https://code-canvas-backend-r1z9.onrender.com";
     const connectionOptions = {
       "force new connection": true,
       reconnectionAttempts: Infinity,
@@ -77,15 +76,7 @@ function App() {
     <Box minH="100vh" bg="#0f0a19" color="gray.500" px={6} py={5}>
       <AuthProvider>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home socket={socket} />} />
-            <Route path="/code/:roomid" element={
-              <AuthenticatedRoute>
-                <CodeCanvas users={users} user={user!} socket={socket} />
-              </AuthenticatedRoute>
-            } />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          <AnimateRoutes user={user!} users={users} socket={socket}/>
         </BrowserRouter>
         <Toaster />
       </AuthProvider>
@@ -93,13 +84,4 @@ function App() {
   )
 }
 
-function AuthenticatedRoute({children}: any) {
-  const authContext = useAuth();
-  if (authContext.isAuthenticated) {
-      return children;
-  }
-
-  return <Navigate to="/" />
-}
-
-export default App
+export default App;

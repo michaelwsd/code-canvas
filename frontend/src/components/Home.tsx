@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Heading, Input, VStack, Text, HStack } from "@chakra-ui/react";
+import { Box, Button, Heading, Input, VStack, Text, HStack, IconButton, Link } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { uniqueId } from "tldraw";
 import type { HomeProps, userDataType } from "@/utils/types";
 import { toaster } from "./ui/toaster";
 import { useAuth } from "./AuthContext";
+import { FaGithub } from "react-icons/fa";
 
 export const Home = ({socket}: HomeProps) => {
   const [roomId, setRoomId] = useState("");
@@ -128,6 +129,23 @@ export const Home = ({socket}: HomeProps) => {
         w="lg"
         textAlign="center"
       >
+        <Link
+        href="https://github.com/michaelwsd/code-canvas"
+        position={'absolute'}
+        top={4}
+        right={4}
+        target="blank"
+        >
+          <IconButton
+            aria-label="GitHub Repository"
+            variant="ghost"
+            color="white"
+            _hover={{ color: "gray.300" }}
+            fontSize="2xl"
+          >
+            <FaGithub />
+          </IconButton>
+        </Link>
         <Heading size="2xl" fontWeight={'extrabold'}>Code Canvas</Heading>
         <Text fontSize="sm" opacity={0.9} fontWeight={'bold'} fontStyle={'italic'}>
           code and sketch your thoughts in one place
