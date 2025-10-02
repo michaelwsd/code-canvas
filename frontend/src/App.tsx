@@ -17,7 +17,7 @@ function App() {
 
     // create the socket once on mount
     // deployed backend server: https://code-canvas-backend-r1z9.onrender.com
-    const server = "http://localhost:5000";
+    const server = "https://code-canvas-backend-r1z9.onrender.com";
     const connectionOptions = {
       "force new connection": true,
       reconnectionAttempts: Infinity,
